@@ -61,4 +61,4 @@ export class Index extends Component {
   }
 }
 
-export default connect(undefined, { toggle: actions.toggleActive })(Index)
+export default props => <Index {...props} toggle={actions.toggleActive} />
