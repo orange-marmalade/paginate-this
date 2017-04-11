@@ -7,12 +7,12 @@
     "start": "webpack-dev-server --progress --colors -w",
     "lint": "eslint ./app/** --ext=js,jsx",
     "test": "npm run lint",
-    "build-example": "webpack ./index.js"
+    "build-example": "webpack ./index.js --config ./webpack.config.deploy.js"
   },
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@orange-marmalade/paginate-this": "^4.0.0-beta-4",
+    "@orange-marmalade/paginate-this": "^4.0.0-beta-7",
     "axios": "^0.13.1",
     "babel-core": "^6.13.2",
     "babel-loader": "^6.2.4",
