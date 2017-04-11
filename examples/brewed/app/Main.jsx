@@ -11,6 +11,7 @@ import { initializeStore, configurePageParams, middleware, debug } from '@orange
 import reducers from './reducers'
 import App from './App'
 
+debug()
 initializeStore()
 
 configurePageParams({
