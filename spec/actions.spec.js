@@ -6,7 +6,6 @@ import thunk from 'redux-thunk'
 import composables, { expireAll } from '../src/actions'
 import { defaultPaginator } from '../src/reducer'
 import actionType, * as actionTypes from '../src/actions/actionTypes'
-import expectAsync from './specHelper'
 import { registerPaginator } from '../src/lib/stateManagement'
 import range from '../src/lib/range'
 
@@ -341,16 +340,8 @@ describe('pageActions', () => {
   describe('updateAsync', () => {
     const itemId = 'itemId'
 
-    beforeEach(() => {
-      PromiseMock.install()
-    })
-
-    afterEach(() => {
-      PromiseMock.uninstall()
-    })
-
     context('in quick succession', () => {
-      it('clears the updating flag when all updates have finished', () => {
+      it('clears the updating flag when all updates have finished', (done) => {
         const { pageActions, store } = setup()
         const updateData = { active: true }
 
@@ -372,16 +363,15 @@ describe('pageActions', () => {
           store.dispatch(pageActions.updateAsync(itemId, updateData, Promise.resolve()))
         )
 
-        expectAsync(
-          Promise.all(updates).then(() =>
-            expect(store.getActions()).toEqual(expectedActions)
-          )
-        )
+        Promise.all(updates).then(() => {
+          expect(store.getActions()).toEqual(expectedActions)
+          done()
+        })
       })
     })
 
     context('on update success', () => {
-      it('updates the item', () => {
+      it('updates the item', (done) => {
         const { pageActions, store } = setup()
         const updateData = { active: true }
         const update = Promise.resolve()
@@ -392,16 +382,15 @@ describe('pageActions', () => {
           pageActions.updateComplete(itemId, 0)
         ]
 
-        expectAsync(
-          store.dispatch(pageActions.updateAsync(itemId, updateData, update)).then(() => {
-            expect(store.getActions()).toEqual(expectedActions)
-          })
-        )
+        store.dispatch(pageActions.updateAsync(itemId, updateData, update)).then(() => {
+          expect(store.getActions()).toEqual(expectedActions)
+          done()
+        })
       })
     })
 
     context('on update failure', () => {
-      it('reverts the item', () => {
+      it('reverts the item', (done) => {
         const record = {
           id: itemId,
           name: 'Ewe and IPA'
@@ -424,30 +413,21 @@ describe('pageActions', () => {
           pageActions.resetItem(itemId, record)
         ]
 
-        expectAsync(
-          store.dispatch(pageActions.updateAsync(itemId, updateData, update)).catch(() => {
-            const actions = store.getActions()
-            expect(actions).toEqual(expectedActions)
-          })
-        )
+        store.dispatch(pageActions.updateAsync(itemId, updateData, update)).catch(() => {
+          const actions = store.getActions()
+          expect(actions).toEqual(expectedActions)
+          done()
+        })
       })
     })
   })
 
   describe('updateItemsAsync', () => {
-    beforeEach(() => {
-      PromiseMock.install()
-    })
-
-    afterEach(() => {
-      PromiseMock.uninstall()
-    })
-
     context('on update success', () => {
       const updateData = { active: true }
       const results = [{ id: 1, name: 'Ewe and IPA' }]
 
-      it('does an async update on all the items', () => {
+      it('does an async update on all the items', (done) => {
         const ids = results.map(r => r.id)
         const { pageActions, store } = setup(true, results)
         const expectedActions = [
@@ -458,16 +438,15 @@ describe('pageActions', () => {
 
         const update = Promise.resolve(updateData)
 
-        expectAsync(
-          store.dispatch(pageActions.updateItemsAsync(ids, updateData, update)).then(() => {
-            expect(store.getActions()).toEqual(expectedActions)
-          })
-        )
+        store.dispatch(pageActions.updateItemsAsync(ids, updateData, update)).then(() => {
+          expect(store.getActions()).toEqual(expectedActions)
+          done()
+        })
       })
     })
 
     context('on update failure', () => {
-      it('reverts the results', () => {
+      it('reverts the results', (done) => {
         const itemId = 1
 
         const record = {
@@ -491,12 +470,11 @@ describe('pageActions', () => {
           pageActions.resetResults(results)
         ]
 
-        expectAsync(
-          store.dispatch(pageActions.updateItemsAsync([itemId], updateData, update)).catch(() => {
-            const actions = store.getActions()
-            expect(actions).toEqual(expectedActions)
-          })
-        )
+        store.dispatch(pageActions.updateItemsAsync([itemId], updateData, update)).catch(() => {
+          const actions = store.getActions()
+          expect(actions).toEqual(expectedActions)
+          done()
+        })
       })
     })
   })
@@ -504,17 +482,9 @@ describe('pageActions', () => {
   describe('removeAsync', () => {
     const itemId = 'itemId'
 
-    beforeEach(() => {
-      PromiseMock.install()
-    })
-
-    afterEach(() => {
-      PromiseMock.uninstall()
-    })
-
     context('on remove success', () => {
       context('by default', () => {
-        it('expires the list', () => {
+        it('expires the list', (done) => {
           const { pageActions, store } = setup()
           const remove = Promise.resolve()
 
@@ -523,16 +493,15 @@ describe('pageActions', () => {
             pageActions.expire()
           ]
 
-          expectAsync(
-            store.dispatch(pageActions.removeAsync(itemId, remove)).then(() => {
-              expect(store.getActions()).toEqual(expectedActions)
-            })
-          )
+          store.dispatch(pageActions.removeAsync(itemId, remove)).then(() => {
+            expect(store.getActions()).toEqual(expectedActions)
+            done()
+          })
         })
       })
 
       context('when choosing not to expire', () => {
-        it('removes the item', () => {
+        it('removes the item', (done) => {
           const { pageActions, store } = setup()
           const remove = Promise.resolve()
 
@@ -541,17 +510,16 @@ describe('pageActions', () => {
             pageActions.removeItem(itemId)
           ]
 
-          expectAsync(
-            store.dispatch(pageActions.removeAsync(itemId, remove, false)).then(() => {
-              expect(store.getActions()).toEqual(expectedActions)
-            })
-          )
+          store.dispatch(pageActions.removeAsync(itemId, remove, false)).then(() => {
+            expect(store.getActions()).toEqual(expectedActions)
+            done()
+          })
         })
       })
     })
 
     context('on remove failure', () => {
-      it('reverts the item', () => {
+      it('reverts the item', (done) => {
         const record = {
           id: itemId,
           name: 'Ewe and IPA'
@@ -567,12 +535,11 @@ describe('pageActions', () => {
           pageActions.resetItem(itemId, record)
         ]
 
-        expectAsync(
-          store.dispatch(pageActions.removeAsync(itemId, remove)).catch(() => {
-            const actions = store.getActions()
-            expect(actions).toEqual(expectedActions)
-          })
-        )
+        store.dispatch(pageActions.removeAsync(itemId, remove)).catch(() => {
+          const actions = store.getActions()
+          expect(actions).toEqual(expectedActions)
+          done()
+        })
       })
     })
   })
