@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { getFlux, bindActions } from '../flux/flux'
 import composables from '../actions'
 import { defaultPaginator } from '../reducer'
-import { preloadedPaginator } from '../lib/stateManagement'
+import { preloadedPaginator, stateInfo } from '../lib/stateManagement'
 
 export const connector = getFlux().decorate(
   (state, ownProps) => ({
@@ -37,13 +37,19 @@ export class PaginationWrapper extends Component {
   }
 
   componentDidMount() {
-    const { paginator, pageActions } = this.props
+    const { paginator, pageActions, listId } = this.props
 
     if (!paginator.get('initialized')) {
       pageActions.initialize()
     }
 
-    this.reloadIfStale(this.props)
+    const { cache } = stateInfo()[listId]
+
+    if (!cache) {
+      pageActions.reload()
+    } else {
+      this.reloadIfStale(this.props)
+    }
   }
 
   componentWillReceiveProps(nextProps) {

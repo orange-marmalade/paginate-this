@@ -22,6 +22,7 @@ export function stateInfo() {
 export function registerPaginator({
   listId,
   fetch,
+  cache = false,
   initialSettings = {},
   pageParams = {},
   locator = defaultLocator(listId)
@@ -29,6 +30,7 @@ export function registerPaginator({
   stateMap[listId] = {
     locator,
     fetch,
+    cache,
     initialSettings,
     params: {
       ...defaultPageParams(),
