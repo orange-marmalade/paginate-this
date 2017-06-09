@@ -20,6 +20,5 @@ export default function expectAsync(...promises) {
     rejected = true
   })
 
-  Promise.runAll()
   expect(rejected).toBe(false)
 }

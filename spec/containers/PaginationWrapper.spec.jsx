@@ -3,6 +3,7 @@ import expect from 'expect'
 import { mount } from 'enzyme'
 import { PaginationWrapper } from '../../src/containers/PaginationWrapper'
 import { defaultPaginator } from '../../src/reducer'
+import '../specHelper'
 
 const MockComponent = () => false
 
@@ -45,7 +46,7 @@ describe('<PaginationWrapper />', () => {
 
   context('when paginator is stale', () => {
     context('and there is no load error', () => {
-      const props = getProps({ stale: true })
+      const props = getProps({ stale: true, initialized: true })
       mount(
         <PaginationWrapper {...props}>
           <MockComponent />

@@ -37,30 +37,21 @@ const setup = (pass=true, results=[]) => {
 
 describe('pageActions', () => {
   describe('pageActions.reload', () => {
-    beforeEach(() => {
-      PromiseMock.install()
-    })
-
-    afterEach(() => {
-      PromiseMock.uninstall()
-    })
-
-
     context('when fetch succeeds', () => {
-      it('dispatches RESULTS_UPDATED', () => {
+      it('dispatches RESULTS_UPDATED', (done) => {
         const { pageActions, store } = setup()
 
-        expectAsync(
-          store.dispatch(pageActions.reload()).then(() => {
-            const actions = store.getActions()
-            const types = actions.map(a => a.type)
+        store.dispatch(pageActions.reload()).then(() => {
+          const actions = store.getActions()
+          const types = actions.map(a => a.type)
 
-            expect(types).toEqual([
-              resolve(actionTypes.FETCH_RECORDS),
-              resolve(actionTypes.RESULTS_UPDATED)
-            ])
-          })
-        )
+          expect(types).toEqual([
+            resolve(actionTypes.FETCH_RECORDS),
+            resolve(actionTypes.RESULTS_UPDATED)
+          ])
+
+          done()
+        })
       })
 
       context('when results props are configured', () => {
@@ -86,42 +77,40 @@ describe('pageActions', () => {
 
         const pageActions = composables({ listId })
 
-        it('is able to read the results', () => {
-          expectAsync(
-            store.dispatch(pageActions.reload()).then(() => {
-              const t = resolve(actionTypes.RESULTS_UPDATED)
-              const action = store.getActions().find(a => a.type === t)
-              expect(action.results).toEqual(data.recipes)
-            })
-          )
+        it('is able to read the results', (done) => {
+          store.dispatch(pageActions.reload()).then(() => {
+            const t = resolve(actionTypes.RESULTS_UPDATED)
+            const action = store.getActions().find(a => a.type === t)
+            expect(action.results).toEqual(data.recipes)
+            done()
+          })
         })
 
-        it('is able to read the count', () => {
-          expectAsync(
-            store.dispatch(pageActions.reload()).then(() => {
-              const t = resolve(actionTypes.RESULTS_UPDATED)
-              const action = store.getActions().find(a => a.type === t)
-              expect(action.totalCount).toEqual(data.total_entries)
-            })
-          )
+        it('is able to read the count', (done) => {
+          store.dispatch(pageActions.reload()).then(() => {
+            const t = resolve(actionTypes.RESULTS_UPDATED)
+            const action = store.getActions().find(a => a.type === t)
+            expect(action.totalCount).toEqual(data.total_entries)
+            done()
+          })
         })
       })
     })
 
     context('when fetch fails', () => {
-      it('dispatches RESULTS_UPDATED_ERROR', () => {
+      it('dispatches RESULTS_UPDATED_ERROR', (done) => {
         const { pageActions, store } = setup(false)
 
-        expectAsync(
-          store.dispatch(pageActions.reload()).then(() => {
-            const actions = store.getActions()
-            const types = actions.map(a => a.type)
-            expect(types).toEqual([
-              resolve(actionTypes.FETCH_RECORDS),
-              resolve(actionTypes.RESULTS_UPDATED_ERROR)
-            ])
-          })
-        )
+        store.dispatch(pageActions.reload()).then(() => {
+          const actions = store.getActions()
+          const types = actions.map(a => a.type)
+          expect(types).toEqual([
+            resolve(actionTypes.FETCH_RECORDS),
+            resolve(actionTypes.RESULTS_UPDATED_ERROR)
+          ])
+
+          done()
+        })
       })
     })
   })

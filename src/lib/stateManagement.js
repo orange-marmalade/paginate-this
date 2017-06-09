@@ -1,6 +1,7 @@
 import { Map } from 'immutable'
 import { defaultPaginator } from '../reducer'
 import { translate, responseProps, recordProps } from '../pageInfoTranslator'
+import debounce from './debounce'
 
 const stateMap = {}
 const defaultLocator = listId => state => state[listId]
@@ -19,6 +20,10 @@ export function stateInfo() {
   return stateMap
 }
 
+export function listInfo(listId) {
+  return stateInfo()[listId] || {}
+}
+
 export function registerPaginator({
   listId,
   fetch,
@@ -29,7 +34,7 @@ export function registerPaginator({
 }) {
   stateMap[listId] = {
     locator,
-    fetch,
+    fetch: debounce(fetch),
     cache,
     initialSettings,
     params: {
