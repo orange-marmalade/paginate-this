@@ -3,15 +3,24 @@ import actionType, * as actionTypes from './actionTypes'
 import { translate } from '../pageInfoTranslator'
 import { getPaginator, listConfig } from '../lib/stateManagement'
 
-const fetcher = id =>
+const fetcher = (id, resolver) =>
   (dispatch, getState) => {
-    const { fetch, params } = listConfig(id)
+    const { fetch, params, dynamic } = listConfig(id)
+
+    if (dynamic && !resolver) {
+      throw new Error(
+        'List was declared with a dynamic fetch function, but no resolver was provided'
+      )
+    }
+
+    const request = dynamic ? fetch(resolver) : fetch
+
     const pageInfo = getPaginator(id, getState())
     const requestId = uuid.v1()
 
     dispatch({ type: actionType(actionTypes.FETCH_RECORDS, id), requestId })
 
-    const promise = dispatch(fetch(translate(pageInfo)))
+    const promise = dispatch(request(translate(pageInfo)))
 
     return promise.then(resp =>
       dispatch({
@@ -37,7 +46,7 @@ export default function fetchingComposables(config) {
       type: resolve(actionTypes.INITIALIZE_PAGINATOR),
       preloaded: config.preloaded
     }),
-    reload: () => fetcher(id),
+    reload: () => fetcher(id, config.resolver),
     next: () => ({
       type: resolve(actionTypes.NEXT_PAGE)
     }),
