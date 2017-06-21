@@ -9,7 +9,7 @@ If you want to be able to edit your records from within the list view, we've got
 updateAsync(id, data, update)
 ```
 
-We intend for the `updateAsync` action to be your one-stop-shop for inline updates. You provide the id of the item you want to update, a promise that performs a server update, and the data that will be applied to the item.
+We intend for the `updateAsync` action to be your one-stop-shop for inline updates. You provide the id of the item you want to update, the data that will be applied to the item, and a promise that performs a server update.
 
 Example:
 
