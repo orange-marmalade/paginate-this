@@ -62,7 +62,7 @@ The `updateAsync` action actually performs several synchronous update operations
 4. If the `update` promise succeeds, call `updateItem` again using the same `data` from step 1.
 5. If the `update` promise fails, use `resetItem` to revert the item to its previous state. Then rethrow the error for the caller to handle.
 
-We expect that `updateAsync` will cover most of your use cases,you may desire more fine grained control. To provide this, we expose every operation that `updateAsync` performs so that you can organize them anyway you want to.
+We expect that `updateAsync` will cover most of your use cases, but you may desire more fine grained control. To provide this, we expose every operation that `updateAsync` performs so that you can organize them anyway you want to.
 
 ## Instant Update
 
