@@ -9,13 +9,7 @@ If you want to be able to edit your records from within the list view, we've got
 updateAsync(id, data, update)
 ```
 
-We intend for the `updateAsync` action to be your one-stop-shop for inline updates. This action executes the following operations:
-
-1. Call `updateItem` to merge the properties from the `data` argument. This will normally be the same data you submit to the server, but can really be anything you want.
-2. Call `updatingItem` to indicate that the item is waiting for an update from the server.
-3. Call the `update` promise, provided as the last argument to `updateAsync`. 
-4. If the `update` promise succeeds, call `updateItem` again using the resolved data.
-5. If the `update` promise fails, use `resetItem` to revert the item to its previous state. Then rethrow the error for the caller to handle.
+We intend for the `updateAsync` action to be your one-stop-shop for inline updates. You provide a promise that performs a server update, and the data that will be applied to the item.
 
 Example:
 
@@ -59,6 +53,14 @@ export function toggleActive(recipe) {
   )
 }
 ```
+
+The `updateAsync` action actually performs several synchronous update operations:
+
+1. Call `updateItem` to merge the properties from the `data` argument. This will normally be the same data you submit to the server, but can really be anything you want.
+2. Call `updatingItem` to indicate that the item is waiting for an update from the server.
+3. Call the `update` promise, provided as the last argument to `updateAsync`. 
+4. If the `update` promise succeeds, call `updateItem` again using the same `data` from step 1.
+5. If the `update` promise fails, use `resetItem` to revert the item to its previous state. Then rethrow the error for the caller to handle.
 
 We expect that `updateAsync` will cover most of your use cases,you may desire more fine grained control. To provide this, we expose every operation that `updateAsync` performs so that you can organize them anyway you want to.
 
