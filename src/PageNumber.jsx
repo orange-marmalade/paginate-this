@@ -3,13 +3,13 @@ import PropTypes from 'prop-types'
 import { paginate } from './decorators'
 
 export function PageNumber(props) {
-  const { pageActions, page, currentPage, tag } = props;
+  const { pageActions, page, currentPage, pageTag } = props;
   const navigate = () =>
     pageActions.goTo(page)
 
-  const Tag = tag;
+  const Tag = pageTag;
   const pageNumber = <span>{page}</span>
-  const tagProps = tag !== PageNumber.defaultProps.tag ? props : undefined
+  const tagProps = Tag !== PageNumber.defaultProps.pageTag ? props : undefined
   const link = page === currentPage ? pageNumber : (
     <Tag {...tagProps} type="button" onClick={navigate}>{pageNumber}</Tag>
   )
@@ -23,10 +23,10 @@ PageNumber.propTypes = {
   }).isRequired,
   page: PropTypes.number.isRequired,
   currentPage: PropTypes.number.isRequired,
-  tag: PropTypes.oneOfType([PropTypes.func, PropTypes.string])
+  pageTag: PropTypes.oneOfType([PropTypes.func, PropTypes.string])
 }
 PageNumber.defaultProps = {
-  tag: 'button'
+  pageTag: 'button'
 }
 
 export default paginate(PageNumber)
