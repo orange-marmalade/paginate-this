@@ -2,14 +2,16 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { paginate } from './decorators'
 
-export function PageNumber({ pageActions, page, currentPage, tag }) {
+export function PageNumber(props) {
+  const { pageActions, page, currentPage, tag } = props;
   const navigate = () =>
     pageActions.goTo(page)
 
   const Tag = tag;
   const pageNumber = <span>{page}</span>
+  const tagProps = tag !== PageNumber.defaultProps.tag ? props : undefined
   const link = page === currentPage ? pageNumber : (
-    <Tag type="button" onClick={navigate}>{pageNumber}</Tag>
+    <Tag {...tagProps} type="button" onClick={navigate}>{pageNumber}</Tag>
   )
 
   return link
