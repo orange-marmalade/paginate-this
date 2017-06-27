@@ -55,7 +55,8 @@ DataTable.propTypes = {
     PropTypes.string,
     PropTypes.number
   ])),
-  className: PropTypes.string
+  className: PropTypes.string,
+  optionalSortTag: PropTypes.oneOfType([PropTypes.func, PropTypes.string])
 }
 
 export default tabulateLean(DataTable)
