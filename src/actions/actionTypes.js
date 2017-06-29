@@ -1,4 +1,5 @@
 export const INITIALIZE_PAGINATOR = '@@paginate-this/INITIALIZE_PAGINATOR'
+export const RESET_PAGINATOR = '@@paginate-this/RESET_PAGINATOR'
 export const EXPIRE_PAGINATOR = '@@paginate-this/EXPIRE_PAGINATOR'
 export const EXPIRE_ALL = '@@paginate-this/EXPIRE_ALL'
 export const FOUND_PAGINATOR = '@@paginate-this/FOUND_PAGINATOR'

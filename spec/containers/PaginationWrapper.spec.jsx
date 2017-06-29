@@ -11,6 +11,7 @@ const MockComponent = () => false
 function getProps(props = {}) {
   return {
     pageActions: {
+      reset: expect.createSpy(),
       reload: expect.createSpy(),
       initialize: expect.createSpy()
     },
@@ -92,8 +93,8 @@ describe('<PaginationWrapper />', () => {
         </PaginationWrapper>
       )
 
-      it('executes a reload', () => {
-        expect(props.pageActions.reload).toHaveBeenCalled()
+      it('executes a reset', () => {
+        expect(props.pageActions.reset).toHaveBeenCalled()
       })
     })
 
@@ -109,8 +110,8 @@ describe('<PaginationWrapper />', () => {
         </PaginationWrapper>
       )
 
-      it('does not execute a reload', () => {
-        expect(props.pageActions.reload).toNotHaveBeenCalled()
+      it('does not execute a reset', () => {
+        expect(props.pageActions.reset).toNotHaveBeenCalled()
       })
     })
   })

@@ -37,6 +37,10 @@ export default function fetchingComposables(config) {
       type: resolve(actionTypes.INITIALIZE_PAGINATOR),
       preloaded: config.preloaded
     }),
+    reset: (settings = {}) => ({
+      type: resolve(actionTypes.RESET_PAGINATOR),
+      settings
+    }),
     reload: () => fetcher(id),
     next: () => ({
       type: resolve(actionTypes.NEXT_PAGE)
