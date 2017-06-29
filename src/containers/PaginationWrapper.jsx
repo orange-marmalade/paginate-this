@@ -45,7 +45,7 @@ export class PaginationWrapper extends Component {
       const { cache } = listInfo(listId)
 
       if (!cache) {
-        pageActions.reload()
+        pageActions.reset()
       } else {
         this.reloadIfStale(this.props)
       }

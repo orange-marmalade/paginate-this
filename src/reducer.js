@@ -30,6 +30,15 @@ function initialize(state, action) {
   })
 }
 
+function reset(initialSettings) {
+  return (_, action) => defaultPaginator.merge({
+    initialized: true,
+    stale: true,
+    ...initialSettings,
+    ...action.settings
+  })
+}
+
 function expire(state) {
   return state.merge({ stale: true, loadError: null })
 }
@@ -216,6 +225,7 @@ export default function createPaginator(config) {
     ...augmentWith,
     [actionTypes.EXPIRE_ALL]: expire,
     [resolve(actionTypes.INITIALIZE_PAGINATOR)]: initialize,
+    [resolve(actionTypes.RESET_PAGINATOR)]: reset(initialSettings),
     [resolve(actionTypes.EXPIRE_PAGINATOR)]: expire,
     [resolve(actionTypes.PREVIOUS_PAGE)]: prev,
     [resolve(actionTypes.NEXT_PAGE)]: next,
