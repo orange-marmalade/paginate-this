@@ -110,8 +110,8 @@ describe('<PaginationWrapper />', () => {
         </PaginationWrapper>
       )
 
-      it('does not execute a reload', () => {
-        expect(props.pageActions.reload).toNotHaveBeenCalled()
+      it('does not execute a reset', () => {
+        expect(props.pageActions.reset).toNotHaveBeenCalled()
       })
     })
   })

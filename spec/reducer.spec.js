@@ -326,6 +326,50 @@ describe('pagination reducer', () => {
     expect(state.get('results').toJS()).toEqual(results)
   })
 
+  describe('RESET_PAGINATOR', () => {
+    const listId = 'custom'
+    const initialSettings = {
+      pageSize: defaultPaginator.get('pageSize') + 5
+    }
+
+    const customReducer = createPaginator({ listId, initialSettings })
+    const actions = composables({ listId })
+
+    context('when the state has changed', () => {
+      const changedState = defaultPaginator.merge({
+        pageSize: initialSettings.pageSize + 10,
+        page: 13,
+        sort: 'created_at',
+        sortReverse: true
+      })
+
+      context('when called with no arguments', () => {
+        it('resets the list using the initial settings', () => {
+          const finalState = customReducer(changedState, actions.reset())
+          const expectedState = defaultPaginator.merge(initialSettings).merge({
+            initialized: true,
+            stale: true
+          })
+
+          expect(finalState).toEqual(expectedState)
+        })
+      })
+
+      context('when called with overrides', () => {
+        it('resets the list using the initial settings and overrides', () => {
+          const overrides = { pageSize: initialSettings.pageSize + 30 }
+          const finalState = customReducer(changedState, actions.reset(overrides))
+          const expectedState = defaultPaginator.merge(initialSettings).merge({
+            initialized: true,
+            stale: true
+          }).merge(overrides)
+
+          expect(finalState).toEqual(expectedState)
+        })
+      })
+    })
+  })
+
   describe('UPDATE_ITEMS', () => {
     const itemId = 'someId'
     const results = [{ id: itemId, name: 'Pouty Stout' }]

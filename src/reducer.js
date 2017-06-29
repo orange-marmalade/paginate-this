@@ -33,10 +33,8 @@ function initialize(state, action) {
 function reset(initialSettings) {
   return (_, action) => defaultPaginator.merge({
     initialized: true,
-    stale: true,
-    ...initialSettings,
-    ...action.settings
-  })
+    stale: true
+  }).merge(initialSettings).merge(action.settings || {})
 }
 
 function expire(state) {
