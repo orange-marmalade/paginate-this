@@ -42,7 +42,7 @@
   "author": "Sam Slotsky",
   "license": "MIT",
   "dependencies": {
-    "postinstall-build": "https://github.com/jlaramie/postinstall-build.git",
+    "postinstall-build": "^5.0.1",
     "prop-types": "^15.5.7",
     "uuid": "^3.0.1"
   },
