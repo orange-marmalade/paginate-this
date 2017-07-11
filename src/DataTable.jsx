@@ -6,12 +6,12 @@ import { tabulateLean } from './decorators'
 import DataRow from './containers/DataRow'
 import TableRow from './TableRow'
 
-function renderRow(headers) {
+function renderRow(headers, rowTag = TableRow) {
   return (id, i) => (
     <DataRow
       key={i}
       itemId={id}
-      component={TableRow}
+      component={rowTag}
       index={i}
       headers={headers}
     />
@@ -19,7 +19,7 @@ function renderRow(headers) {
 }
 
 export function DataTable(props) {
-  const { ids, headers, isLoading, className = 'border' } = props
+  const { ids, headers, isLoading, rowTag, className = 'border' } = props
 
   const headerRow = headers.map(h =>
     <th key={h.field}>
@@ -42,7 +42,7 @@ export function DataTable(props) {
         </tr>
       </thead>
       <tbody>
-        {ids.map(renderRow(headers))}
+        {ids.map(renderRow(headers, rowTag))}
       </tbody>
     </table>
   )
@@ -55,7 +55,9 @@ DataTable.propTypes = {
     PropTypes.string,
     PropTypes.number
   ])),
-  className: PropTypes.string
+  className: PropTypes.string,
+  optionalSortTag: PropTypes.oneOfType([PropTypes.func, PropTypes.string]),
+  optionalRowTag: PropTypes.oneOfType([PropTypes.func, PropTypes.string])
 }
 
 export default tabulateLean(DataTable)

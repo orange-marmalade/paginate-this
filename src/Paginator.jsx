@@ -65,7 +65,8 @@ Paginator.propTypes = {
   currentPage: PropTypes.number,
   totalPages: PropTypes.number,
   hasPreviousPage: PropTypes.bool,
-  hasNextPage: PropTypes.bool
+  hasNextPage: PropTypes.bool,
+  optionalPageTag: PropTypes.oneOfType([PropTypes.func, PropTypes.string])
 }
 
 export default paginate(Paginator)
