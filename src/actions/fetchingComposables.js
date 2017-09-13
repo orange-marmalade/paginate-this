@@ -3,7 +3,7 @@ import actionType, * as actionTypes from './actionTypes'
 import { translate } from '../pageInfoTranslator'
 import { getPaginator, listConfig } from '../lib/stateManagement'
 
-const fetcher = id =>
+const fetcher = (id, config) =>
   (dispatch, getState) => {
     const { fetch, params } = listConfig(id)
     const pageInfo = getPaginator(id, getState())
@@ -11,7 +11,7 @@ const fetcher = id =>
 
     dispatch({ type: actionType(actionTypes.FETCH_RECORDS, id), requestId })
 
-    const promise = dispatch(fetch(translate(pageInfo)))
+    const promise = dispatch(fetch(translate(pageInfo), config))
 
     return promise.then(resp =>
       dispatch({
@@ -41,7 +41,7 @@ export default function fetchingComposables(config) {
       type: resolve(actionTypes.RESET_PAGINATOR),
       settings
     }),
-    reload: () => fetcher(id),
+    reload: () => fetcher(id, config),
     next: () => ({
       type: resolve(actionTypes.NEXT_PAGE)
     }),
