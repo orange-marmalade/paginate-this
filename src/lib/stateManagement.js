@@ -24,6 +24,18 @@ export function listInfo(listId) {
   return stateInfo()[listId] || {}
 }
 
+export function listConfig(listId) {
+  const map = stateMap[listId]
+
+  return {
+    ...map,
+    params: {
+      ...defaultPageParams(),
+      ...map.params
+    }
+  }
+}
+
 export function registerPaginator({
   listId,
   fetch,
@@ -37,13 +49,10 @@ export function registerPaginator({
     fetch: debounce(fetch),
     cache,
     initialSettings,
-    params: {
-      ...defaultPageParams(),
-      ...pageParams
-    }
+    params: pageParams
   }
 
-  return stateMap[listId]
+  return listConfig(listId)
 }
 
 export function getPaginator(listId, state) {
@@ -60,10 +69,6 @@ export function getItem(state, listId, itemId) {
     undefined,
     Map()
   )
-}
-
-export function listConfig(listId) {
-  return stateMap[listId]
 }
 
 export function preloadedPaginator(state, listId, preloaded = preload) {

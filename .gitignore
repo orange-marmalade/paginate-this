@@ -6,3 +6,4 @@ coverage/
 examples/server-rendering/assets/bundle.js
 npm-debug.log
 dist/
+~/
