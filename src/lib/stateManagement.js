@@ -40,6 +40,7 @@ export function registerPaginator({
   listId,
   fetch,
   cache = false,
+  sticky = false,
   initialSettings = {},
   pageParams = {},
   locator = defaultLocator(listId)
@@ -48,6 +49,7 @@ export function registerPaginator({
     locator,
     fetch: debounce(fetch),
     cache,
+    sticky,
     initialSettings,
     params: pageParams
   }

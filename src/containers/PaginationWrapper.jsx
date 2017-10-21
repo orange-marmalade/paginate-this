@@ -37,23 +37,30 @@ export class PaginationWrapper extends Component {
   }
 
   componentDidMount() {
-    const { paginator, pageActions, listId } = this.props
+    const { paginator, pageActions } = this.props
 
     if (!paginator.get('initialized')) {
       pageActions.initialize()
-    } else {
-      const { cache } = listInfo(listId)
-
-      if (!cache) {
-        pageActions.reset()
-      } else {
-        this.reloadIfStale(this.props)
-      }
+    } else if (!paginator.get('preloaded')) {
+      this.reloadIfStale(this.props)
     }
   }
 
   componentWillReceiveProps(nextProps) {
     this.reloadIfStale(nextProps)
+  }
+
+  componentWillUnmount() {
+    const { pageActions, listId } = this.props
+    const { cache, sticky } = listInfo(listId)
+
+    if (!cache) {
+      if (sticky) {
+        pageActions.expire()
+      } else {
+        pageActions.reset()
+      }
+    }
   }
 
   reloadIfStale(props) {

@@ -5,6 +5,7 @@ import { recordProps } from './pageInfoTranslator'
 import { registerPaginator } from './lib/stateManagement'
 
 export const defaultPaginator = Map({
+  preloaded: false,
   initialized: false,
   page: 1,
   pageSize: 15,
@@ -25,6 +26,7 @@ export const defaultPaginator = Map({
 function initialize(state, action) {
   return state.merge({
     initialized: true,
+    preloaded: !!action.preloaded,
     stale: !action.preloaded,
     ...(action.preloaded || {})
   })
@@ -38,7 +40,7 @@ function reset(initialSettings) {
 }
 
 function expire(state) {
-  return state.merge({ stale: true, loadError: null })
+  return state.merge({ stale: true, preloaded: false, loadError: null })
 }
 
 function next(state) {
